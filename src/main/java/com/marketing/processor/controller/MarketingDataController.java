@@ -1,11 +1,13 @@
 package com.marketing.processor.controller;
 
 import com.marketing.processor.domain.entity.MarketingData;
+import com.marketing.processor.domain.enumeration.MessageBrokerEnum;
 import com.marketing.processor.service.MarketingDataService;
 import com.marketing.processor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -19,7 +21,10 @@ public class MarketingDataController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/data")
+    @Autowired
+    private SimpMessagingTemplate template;
+
+    @GetMapping("/message-list")
     public ResponseEntity<List<MarketingData>> getAllData() {
         try {
             List<MarketingData> data = new ArrayList<>(marketingDataService.findAll());
@@ -29,17 +34,20 @@ public class MarketingDataController {
         }
     }
 
-    @PostMapping("/sendMessage")
+    @PostMapping("/send-message")
     public ResponseEntity<Void> createMessage(
             @RequestBody MarketingData marketingData) {
         boolean result = marketingDataService.save(marketingData);
-        if (result) {
-            ResponseEntity
-                    .status(HttpStatus.CREATED)
+        if (!result) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
                     .build();
         }
+        this.template.convertAndSend(
+                MessageBrokerEnum.BROKER_DESTINATION_TOPIC.getValue() + "/message",
+                marketingData);
         return ResponseEntity
-                .status(HttpStatus.CONFLICT)
+                .status(HttpStatus.CREATED)
                 .build();
     }
 }
