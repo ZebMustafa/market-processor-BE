@@ -1,6 +1,6 @@
 package com.marketing.processor.service.Impl;
 
-import com.marketing.processor.domain.entity.User;
+import com.marketing.processor.domain.entity.UserEntity;
 import com.marketing.processor.repository.UserRepository;
 import com.marketing.processor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +15,14 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     public void createNewUser(Long userId){
-        final User userSource = new User();
-        userSource.setId(userId);
-        userSource.setName(userId+"-user");
-        userRepository.save(userSource);
+        final UserEntity userEntitySource = new UserEntity();
+        userEntitySource.setId(userId);
+        userEntitySource.setName(userId+"-user");
+        userRepository.save(userEntitySource);
     }
 
     @Override
-    public Optional<User> findById(Long userId) {
+    public Optional<UserEntity> findById(Long userId) {
         return userRepository.findById(userId);
     }
 }

@@ -1,12 +1,13 @@
 package com.marketing.processor.service;
 
-import com.marketing.processor.domain.entity.MarketingData;
+import com.marketing.processor.domain.entity.MarketingDataEntity;
 
-import java.net.http.HttpResponse;
 import java.util.List;
 
 public interface MarketingDataService {
-    List<MarketingData> findAll();
+    List<MarketingDataEntity> findAll();
 
-    boolean save(MarketingData marketingData);
+    MarketingDataEntity save(MarketingDataEntity marketingDataEntity);
+
+    List<MarketingDataEntity> findAllByCurrencyFromAndCurrencyTo(String currFrom, String currTo);
 }

@@ -1,7 +1,7 @@
 package com.marketing.processor.service.Impl;
 
-import com.marketing.processor.domain.entity.MarketingData;
-import com.marketing.processor.domain.entity.User;
+import com.marketing.processor.domain.entity.MarketingDataEntity;
+import com.marketing.processor.domain.entity.UserEntity;
 import com.marketing.processor.repository.MarketingDataRepository;
 import com.marketing.processor.service.MarketingDataService;
 import com.marketing.processor.service.UserService;
@@ -20,22 +20,26 @@ public class MarketingDataServiceImpl implements MarketingDataService {
     UserService userService;
 
     @Override
-    public List<MarketingData> findAll() {
+    public List<MarketingDataEntity> findAll() {
         return marketingDataRepository.findAll();
     }
 
     @Override
-    public boolean save(MarketingData marketingData) {
-        if (marketingData.getUserId() == null) {
-            return false;
+    public MarketingDataEntity save(MarketingDataEntity marketingDataEntity) {
+        if (marketingDataEntity.getUserId() == null) {
+            return null;
         }
-        Optional<User> userOptional = userService.findById(marketingData.getUserId());
+        Optional<UserEntity> userOptional = userService.findById(marketingDataEntity.getUserId());
 
         if (userOptional.isEmpty()) {
-            userService.createNewUser(marketingData.getUserId());
+            userService.createNewUser(marketingDataEntity.getUserId());
         }
 
-        marketingDataRepository.save(marketingData);
-        return true;
+        return marketingDataRepository.save(marketingDataEntity);
+    }
+
+    @Override
+    public List<MarketingDataEntity> findAllByCurrencyFromAndCurrencyTo(String currFrom, String currTo) {
+        return marketingDataRepository.findAllByCurrencyFromAndCurrencyTo(currFrom, currTo);
     }
 }

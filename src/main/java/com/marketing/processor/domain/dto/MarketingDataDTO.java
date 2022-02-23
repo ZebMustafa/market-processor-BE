@@ -1,39 +1,17 @@
-package com.marketing.processor.domain.entity;
+package com.marketing.processor.domain.dto;
 
-import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Objects;
 
-@Entity
-@Table(name = "marketing_data")
-public class MarketingData implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class MarketingDataDTO implements Serializable {
     private Long id;
-
-    @Column(name = "currency_from")
     private String currencyFrom;
-
-    @Column(name = "currency_to")
     private String currencyTo;
-
-    @Column(name = "amount_sell")
     private Double amountSell;
-
-    @Column(name = "amount_buy")
     private Double amountBuy;
-
-    @Column(name = "rate")
     private Double rate;
-
-    @Column(name = "time_placed")
-    private Date timePlaced;
-
-    @Column(name = "originating_country")
+    private String timePlaced;
     private String originatingCountry;
-
-    @Column(name = "user_id")
     private Long userId;
 
     public Long getId() {
@@ -84,11 +62,11 @@ public class MarketingData implements Serializable {
         this.rate = rate;
     }
 
-    public Date getTimePlaced() {
+    public String getTimePlaced() {
         return timePlaced;
     }
 
-    public void setTimePlaced(Date timePlaced) {
+    public void setTimePlaced(String timePlaced) {
         this.timePlaced = timePlaced;
     }
 
@@ -106,5 +84,34 @@ public class MarketingData implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MarketingDataDTO that = (MarketingDataDTO) o;
+        return Objects.equals(id, that.id)
+                && Objects.equals(currencyFrom, that.currencyFrom)
+                && Objects.equals(currencyTo, that.currencyTo)
+                && Objects.equals(amountSell, that.amountSell)
+                && Objects.equals(amountBuy, that.amountBuy)
+                && Objects.equals(rate, that.rate)
+                && Objects.equals(timePlaced, that.timePlaced)
+                && Objects.equals(originatingCountry, that.originatingCountry)
+                && Objects.equals(userId, that.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id,
+                currencyFrom,
+                currencyTo,
+                amountSell,
+                amountBuy,
+                rate,
+                timePlaced,
+                originatingCountry,
+                userId);
     }
 }
